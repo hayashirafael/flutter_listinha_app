@@ -44,19 +44,19 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
               title: const Text('Sistema'),
               value: ThemeMode.system,
               groupValue: appStore.themeMode.value,
-              onChanged: (mode) {},
+              onChanged: appStore.changeThemeMode,
             ),
             RadioListTile<ThemeMode>(
               title: const Text('Claro'),
               value: ThemeMode.light,
               groupValue: appStore.themeMode.value,
-              onChanged: (mode) {},
+              onChanged: appStore.changeThemeMode,
             ),
             RadioListTile<ThemeMode>(
               title: const Text('Escuro'),
               value: ThemeMode.dark,
               groupValue: appStore.themeMode.value,
-              onChanged: (mode) {},
+              onChanged: appStore.changeThemeMode,
             ),
             const SizedBox(height: 10),
             Text(
