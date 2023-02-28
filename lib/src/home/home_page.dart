@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:listinha/src/home/widgets/custom_drawer.dart';
 import 'package:listinha/src/home/widgets/task_card.dart';
+import 'package:listinha/src/shared/services/realm/models/task_model.dart';
+import 'package:realm/realm.dart';
 
 import '../shared/widgets/user_image_button.dart';
 
@@ -38,7 +40,10 @@ class _HomePageState extends State<HomePage> {
             ListView.separated(
               padding: const EdgeInsets.only(top: 50, left: 30, right: 30, bottom: 200),
               itemBuilder: (context, index) {
-                return const TaskCard();
+                final board = TaskBoard(Uuid.v4(), 'Nova lista de tarefas');
+                return TaskCard(
+                  board: board,
+                );
               },
               itemCount: 100,
               separatorBuilder: (context, index) {
