@@ -14,9 +14,11 @@ enum TaskCardStatus {
 
 class TaskCard extends StatelessWidget {
   final TaskBoard board;
-  const TaskCard({Key? key, required this.board}) : super(key: key);
+  final double height;
+  const TaskCard({Key? key, required this.board, this.height = 140}) : super(key: key);
 
   double getProgress(List<Task> tasks) {
+    if (tasks.isEmpty) return 0;
     final completes = tasks.where((element) => element.complete).length;
     return completes / tasks.length;
   }
@@ -36,6 +38,28 @@ class TaskCard extends StatelessWidget {
     }
   }
 
+  Color getBackGroundColor(TaskCardStatus status, ThemeData theme) {
+    switch (status) {
+      case TaskCardStatus.pending:
+        return theme.colorScheme.primaryContainer;
+      case TaskCardStatus.completed:
+        return theme.colorScheme.tertiaryContainer;
+      case TaskCardStatus.disabled:
+        return theme.colorScheme.errorContainer;
+    }
+  }
+
+  Color getColor(TaskCardStatus status, ThemeData theme) {
+    switch (status) {
+      case TaskCardStatus.pending:
+        return theme.colorScheme.primary;
+      case TaskCardStatus.completed:
+        return theme.colorScheme.tertiary;
+      case TaskCardStatus.disabled:
+        return theme.colorScheme.error;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -45,11 +69,11 @@ class TaskCard extends StatelessWidget {
     final status = getStatus(board, progress);
     final statusText = status.text;
     final iconData = status.icon;
-    final backGroundColor = Colors.red.withOpacity(0.5);
-    const color = Colors.red;
+    final backGroundColor = getBackGroundColor(status, theme);
+    final color = getColor(status, theme);
 
     return Container(
-      height: 130,
+      height: height,
       decoration: BoxDecoration(
         color: backGroundColor,
         borderRadius: BorderRadius.circular(25),
@@ -63,18 +87,40 @@ class TaskCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(iconData),
+              Icon(
+                iconData,
+                color: theme.iconTheme.color?.withOpacity(0.5),
+              ),
               const Spacer(),
-              Text(statusText),
+              Text(
+                statusText,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: theme.textTheme.bodySmall?.color?.withOpacity(0.5),
+                ),
+              ),
             ],
           ),
           const Spacer(),
-          Text(title),
+          Text(
+            title,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
           LinearProgressIndicator(
             value: progress,
             color: color,
           ),
-          Text(progressText),
+          const SizedBox(height: 2),
+          Text(
+            progressText,
+            style: theme.textTheme.bodySmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.textTheme.bodySmall?.color?.withOpacity(0.5),
+            ),
+          ),
         ],
       ),
     );

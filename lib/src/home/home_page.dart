@@ -40,7 +40,16 @@ class _HomePageState extends State<HomePage> {
             ListView.separated(
               padding: const EdgeInsets.only(top: 50, left: 30, right: 30, bottom: 200),
               itemBuilder: (context, index) {
-                final board = TaskBoard(Uuid.v4(), 'Nova lista de tarefas');
+                final board = TaskBoard(
+                  Uuid.v4(),
+                  'Nova lista de tarefas',
+                  tasks: [
+                    Task(Uuid.v4(), 'description', complete: true),
+                    Task(Uuid.v4(), 'description', complete: true),
+                    Task(Uuid.v4(), 'description', complete: true),
+                    Task(Uuid.v4(), 'description', complete: true),
+                  ],
+                );
                 return TaskCard(
                   board: board,
                 );
