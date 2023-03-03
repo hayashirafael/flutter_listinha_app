@@ -11,10 +11,8 @@ class AppModule extends Module {
   // TODO: implement binds
   List<Bind> get binds => [
         Bind.instance<Realm>(Realm(config)),
-        Bind.factory<ConfigurationService>(
-          (i) => ConfigurationServiceImpl(i()),
-        ),
-        Bind.singleton((i) => AppStore(i())),
+        Bind.singleton<ConfigurationService>((i) => ConfigurationServiceImpl(i(), i())),
+        Bind.singleton((i) => AppStore()),
       ];
   // Singleton, criando apenas 1 instancia
 

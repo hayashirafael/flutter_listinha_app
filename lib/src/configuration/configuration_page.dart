@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:rx_notifier/rx_notifier.dart';
 
 import '../shared/stores/app_store.dart';
 
@@ -11,12 +12,18 @@ class ConfigurationPage extends StatefulWidget {
 }
 
 class _ConfigurationPageState extends State<ConfigurationPage> {
+  final appStore = Modular.get<AppStore>();
+
+  void _changeModeTheme(ThemeMode? mode) {
+    if (mode != null) {
+      appStore.themeMode.value = mode;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final appStore = context.watch<AppStore>(
-      (store) => store.themeMode,
-      // só ira alterar quando o themeMode for alterado
-    );
+    context.select(() => appStore.themeMode.value);
+    //quando o appStore.themeMode.value for modificado, ira atualizar o widget inteiro
     return Scaffold(
       appBar: AppBar(
         title: const Text('configuration'),
@@ -44,19 +51,19 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
               title: const Text('Sistema'),
               value: ThemeMode.system,
               groupValue: appStore.themeMode.value,
-              onChanged: appStore.changeThemeMode,
+              onChanged: _changeModeTheme,
             ),
             RadioListTile<ThemeMode>(
               title: const Text('Claro'),
               value: ThemeMode.light,
               groupValue: appStore.themeMode.value,
-              onChanged: appStore.changeThemeMode,
+              onChanged: _changeModeTheme,
             ),
             RadioListTile<ThemeMode>(
               title: const Text('Escuro'),
               value: ThemeMode.dark,
               groupValue: appStore.themeMode.value,
-              onChanged: appStore.changeThemeMode,
+              onChanged: _changeModeTheme,
             ),
             const SizedBox(height: 10),
             Text(
@@ -65,7 +72,7 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             const SizedBox(height: 10),
             OutlinedButton(
-              onPressed: appStore.deleteApp,
+              onPressed: () {},
               child: const Text('Apagar cache e reiniciar o app'),
             )
           ],
